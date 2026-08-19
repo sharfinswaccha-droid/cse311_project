@@ -1,0 +1,99 @@
+/* ============================================================
+   Design tokens — "packing manifest" identity
+   The store's data model is literally SKUs, stock counts, and
+   order line items — so the UI leans into that: kraft-paper
+   surfaces, dotted receipt rules, stamped status badges, and
+   monospace figures for anything numeric/codified.
+   ============================================================ */
+:root {
+  /* Color */
+  --paper:        #F1EEE6;
+  --paper-raised: #FAF8F3;
+  --ink:          #20262B;
+  --ink-soft:     #565049;
+  --rule:         #C9C2B4;
+  --stamp-red:    #B23A2E;
+  --stamp-red-ink:#7A2620;
+  --stamp-green:  #3D6657;
+  --stamp-green-bg:#E4ECE7;
+  --stamp-amber:  #B9832C;
+  --stamp-amber-bg:#F3E9D4;
+
+  /* Type */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Layout */
+  --max-width: 1120px;
+  --radius: 3px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--stamp-red);
+  outline-offset: 2px;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.mono { font-family: var(--font-mono); }
+
+/* Dotted "leader" rule used between a label and a value, receipt-style */
+.leader {
+  flex: 1;
+  border-bottom: 1.5px dotted var(--rule);
+  margin: 0 8px;
+  height: 1px;
+  transform: translateY(-4px);
+}
+
+.row-leader {
+  display: flex;
+  align-items: baseline;
+}
+
+/* Status stamp badge */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid currentColor;
+}
+.stamp--green { color: var(--stamp-green); background: var(--stamp-green-bg); }
+.stamp--amber { color: var(--stamp-amber); background: var(--stamp-amber-bg); }
+.stamp--red   { color: var(--stamp-red-ink); background: #F5E4E2; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
