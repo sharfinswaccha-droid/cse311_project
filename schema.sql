@@ -1,15 +1,11 @@
--- ============================================================
--- E-Commerce Database — Schema (DDL)
--- Target: MySQL 8.0+
--- ============================================================
+
 
 DROP DATABASE IF EXISTS ecommerce_db;
 CREATE DATABASE ecommerce_db;
 USE ecommerce_db;
 
--- ------------------------------------------------------------
--- Customer
--- ------------------------------------------------------------
+
+
 CREATE TABLE Customer (
     customer_id     INT AUTO_INCREMENT PRIMARY KEY,
     first_name      VARCHAR(50)  NOT NULL,
@@ -20,9 +16,8 @@ CREATE TABLE Customer (
     created_at      DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- ------------------------------------------------------------
--- Address (a customer can have multiple addresses)
--- ------------------------------------------------------------
+
+
 CREATE TABLE Address (
     address_id      INT AUTO_INCREMENT PRIMARY KEY,
     customer_id     INT NOT NULL,
@@ -36,9 +31,8 @@ CREATE TABLE Address (
         ON DELETE CASCADE
 );
 
--- ------------------------------------------------------------
--- Category (self-referencing for sub-categories)
--- ------------------------------------------------------------
+
+
 CREATE TABLE Category (
     category_id         INT AUTO_INCREMENT PRIMARY KEY,
     category_name       VARCHAR(100) NOT NULL,
@@ -47,9 +41,8 @@ CREATE TABLE Category (
         ON DELETE SET NULL
 );
 
--- ------------------------------------------------------------
--- Supplier
--- ------------------------------------------------------------
+
+
 CREATE TABLE Supplier (
     supplier_id     INT AUTO_INCREMENT PRIMARY KEY,
     supplier_name   VARCHAR(100) NOT NULL,
@@ -57,9 +50,8 @@ CREATE TABLE Supplier (
     phone           VARCHAR(20)
 );
 
--- ------------------------------------------------------------
--- Product
--- ------------------------------------------------------------
+
+
 CREATE TABLE Product (
     product_id      INT AUTO_INCREMENT PRIMARY KEY,
     category_id     INT NOT NULL,
@@ -72,9 +64,8 @@ CREATE TABLE Product (
     FOREIGN KEY (category_id) REFERENCES Category(category_id)
 );
 
--- ------------------------------------------------------------
--- Product_Supplier (M:N junction: which suppliers provide which products)
--- ------------------------------------------------------------
+
+
 CREATE TABLE Product_Supplier (
     product_id      INT NOT NULL,
     supplier_id     INT NOT NULL,
@@ -84,9 +75,8 @@ CREATE TABLE Product_Supplier (
     FOREIGN KEY (supplier_id) REFERENCES Supplier(supplier_id) ON DELETE CASCADE
 );
 
--- ------------------------------------------------------------
--- Cart
--- ------------------------------------------------------------
+
+
 CREATE TABLE Cart (
     cart_id         INT AUTO_INCREMENT PRIMARY KEY,
     customer_id     INT NOT NULL,
@@ -94,9 +84,8 @@ CREATE TABLE Cart (
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id) ON DELETE CASCADE
 );
 
--- ------------------------------------------------------------
--- Cart_Item (M:N junction: products inside a cart)
--- ------------------------------------------------------------
+
+
 CREATE TABLE Cart_Item (
     cart_item_id    INT AUTO_INCREMENT PRIMARY KEY,
     cart_id         INT NOT NULL,
@@ -107,9 +96,8 @@ CREATE TABLE Cart_Item (
     UNIQUE (cart_id, product_id)
 );
 
--- ------------------------------------------------------------
--- Order_Tbl  ("Order" is a reserved word in SQL)
--- ------------------------------------------------------------
+
+
 CREATE TABLE Order_Tbl (
     order_id        INT AUTO_INCREMENT PRIMARY KEY,
     customer_id     INT NOT NULL,
@@ -122,9 +110,8 @@ CREATE TABLE Order_Tbl (
     FOREIGN KEY (address_id) REFERENCES Address(address_id)
 );
 
--- ------------------------------------------------------------
--- Order_Item (M:N junction: products inside an order)
--- ------------------------------------------------------------
+
+
 CREATE TABLE Order_Item (
     order_item_id   INT AUTO_INCREMENT PRIMARY KEY,
     order_id        INT NOT NULL,
@@ -135,9 +122,8 @@ CREATE TABLE Order_Item (
     FOREIGN KEY (product_id) REFERENCES Product(product_id)
 );
 
--- ------------------------------------------------------------
--- Payment (supports multiple/partial payments per order)
--- ------------------------------------------------------------
+
+
 CREATE TABLE Payment (
     payment_id      INT AUTO_INCREMENT PRIMARY KEY,
     order_id        INT NOT NULL,
@@ -148,9 +134,8 @@ CREATE TABLE Payment (
     FOREIGN KEY (order_id) REFERENCES Order_Tbl(order_id) ON DELETE CASCADE
 );
 
--- ------------------------------------------------------------
--- Review
--- ------------------------------------------------------------
+
+
 CREATE TABLE Review (
     review_id       INT AUTO_INCREMENT PRIMARY KEY,
     product_id      INT NOT NULL,
@@ -163,9 +148,8 @@ CREATE TABLE Review (
     UNIQUE (product_id, customer_id)   -- one review per customer per product
 );
 
--- ------------------------------------------------------------
--- Helpful indexes
--- ------------------------------------------------------------
+
+
 CREATE INDEX idx_product_category ON Product(category_id);
 CREATE INDEX idx_order_customer   ON Order_Tbl(customer_id);
 CREATE INDEX idx_orderitem_order  ON Order_Item(order_id);
